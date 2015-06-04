@@ -26,7 +26,7 @@ exports.handleRequest = function (req, res) {
           archiveHelpers.addUrlToList(siteUrl);
         }
       });
+    httpHelpers.sendResponse(res, siteUrl, 302);
     });
-    // redirect
   }
 };

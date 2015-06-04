@@ -17,9 +17,13 @@ exports.sendResponse = function(res, data, status) {
 };
 
 exports.serveAssets = function(res, asset, callback) {
+  // todo: check if we need encoding
   fs.readFile(asset, function(err, data) {
-    if (err) throw err;
+    if (err) {
+      exports.sendResponse(res, 'It\'s not here', 404);
+    } else {
     callback(res, data);
+    }
   });
 };
 

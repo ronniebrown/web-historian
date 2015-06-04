@@ -26,9 +26,8 @@ exports.initialize = function(pathsObj){
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function(cb){
-  fs.readFile(exports.paths.list, function(err, data) {
+  fs.readFile(exports.paths.list, {'encoding': 'utf8'}, function(err, data) {
     if (err) throw err;
-    console.log(data);
     var sites = data.split('\n');
     cb(sites);
   });
@@ -39,7 +38,8 @@ exports.isUrlInList = function(url, sites){
 };
 
 exports.addUrlToList = function(url){
-  fs.appendFile(paths.list, url, function (err) {
+  url = url + '\n'
+  fs.appendFile(exports.paths.list, url, {'encoding': 'utf8'}, function (err) {
     if (err) throw err;
   });
 };
