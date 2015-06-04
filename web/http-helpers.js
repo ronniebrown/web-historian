@@ -27,9 +27,10 @@ exports.dataHelper = function(req, callback) {
   var data = '';
   req.on('data', function(chunk) {
     data += chunk;
+
   });
-  req.on('end', function(data) {
-    callback(JSON.parse(data).url);
+  req.on('end', function() {
+    callback(data.split('=')[1]);
   });
 };
 // As you progress, keep thinking about what helper functions you can put here!
