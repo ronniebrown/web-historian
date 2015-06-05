@@ -26,28 +26,60 @@ exports.initialize = function(pathsObj){
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function(cb){
-  fs.readFile(exports.paths.list, {'encoding': 'utf8'}, function(err, data) {
-    if (err) throw err;
-    var sites = data.split('\n');
-    cb(sites);
+  fs.readFile(exports.paths.list, function(err, sites){
+    sites = sites.toString().split('\n');
+    if (cb) {
+      cb(sites);
+    }
   });
 };
 
-exports.isUrlInList = function(url, sites){
-  return sites.indexOf(url) > -1;
+exports.isUrlInList = function(url, cb){
+  exports.readListOfUrls(function(sites) {
+    var exists = _.any(sites, function(site, i) {
+      return site.match(url)
+    });
+    cb(exists);
+  });
 };
 
-exports.addUrlToList = function(url){
-  url = url + '\n'
+// exports.readListOfUrls = function(cb){
+//   fs.readFile(exports.paths.list, {'encoding': 'utf8'}, function(err, data) {
+//     // if (err) throw err;
+//     var sites = data.split('\n');
+//     cb(sites);
+//   });
+// };
+
+// exports.isUrlInList = function(url, cb){
+//   exports.readListOfUrls(function(sites) {
+//     var exists = sites.indexOf(url) > -1;
+//     cb(exists);
+//   });
+// };
+
+exports.addUrlToList = function(url, cb){
+  url = url + '\n';
   fs.appendFile(exports.paths.list, url, {'encoding': 'utf8'}, function (err) {
     if (err) throw err;
+    cb();
   });
 };
 
-exports.isURLArchived = function(){
-  // fs.readdir(path, callback)#
-  // Asynchronous readdir(3). Reads the contents of a directory. The callback gets two arguments (err, files) where files is an array of the names of the files in the directory excluding '.' and '..'.
+exports.readArchivedSites = function(cb){
+  fs.readdir(exports.paths.archivedSites, function(err, files) {
+    if (err) throw err;
+    cb(files)
+  });
+};
+
+exports.isURLArchived = function(url, cb){
+  fs.readdir(exports.paths.archivedSites, function(err, files) {
+    var isArchived = files.indexOf(url) > -1;
+    cb(isArchived);
+  });
 };
 
 exports.downloadUrls = function(){
+
 };
